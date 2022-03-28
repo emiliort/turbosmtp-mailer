@@ -1,0 +1,30 @@
+{
+    "name": "emiliort/turbosmtp-mailer",
+    "type": "library",
+    "description": "Provides turboSMTP integration for Symfony Mailer.",
+    "keywords": ["turboSMTP","symfony","mailer"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "emiliort",
+            "email": "emiliort@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.5",
+        "psr/event-dispatcher": "^1",
+        "symfony/mailer": "^5.1|^6.0"
+    },
+    "require-dev": {
+        "symfony/http-client": "^4.4|^5.0|^6.0"
+    },
+    "autoload": {
+        "psr-4": { 
+            "Turbosmtp\\": "src" 
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "dev"
+}
