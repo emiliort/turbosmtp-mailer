@@ -1,5 +1,5 @@
 <?php
-namespace Turbosmtp\Transport;
+namespace Turbosmtp;
 
 use Symfony\Component\Mailer\Exception\UnsupportedSchemeException;
 use Symfony\Component\Mailer\Transport\AbstractTransportFactory;

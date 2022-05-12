@@ -1,5 +1,5 @@
 <?php
-namespace Turbosmtp\Transport;
+namespace Turbosmtp;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\SentMessage;
@@ -36,7 +36,7 @@ class TurbosmtpApiTransport extends AbstractApiTransport
     {
 
         $recipients=$this->buildRecipients($email, $envelope);
-        $options = [
+        $requestData = [
                     'authuser' => $this->authuser,
                     'authpass' => $this->authpass,
                     'from'=>$envelope->getSender()->getAddress(),                
@@ -46,14 +46,14 @@ class TurbosmtpApiTransport extends AbstractApiTransport
                     'subject'=>$email->getSubject(),
                     'content'=>$email->getTextBody(),
                     'html_content'=>$email->getHtmlBody(),
-                    'custom_headers'=>$this->buildHeaders($email),
-                    // 'mime_raw'
+                    'custom_headers'=>$this->buildHeaders($email),                    
                     'attachments'=>$this->buildAttachments($email),
+                    // 'mime_raw'=>, //TODO intentar pasar el mesaje como mime raw                    
                 ];
 
-        $this->getLogger()->debug('TurbosmtpApiTransport send', $options);
+        $this->getLogger()->debug('TurbosmtpApiTransport send', $requestData);
 
-        $response = $this->client->request('POST', 'https://'.$this->getEndpoint().'/api/v2/mail/send', $options);
+        $response = $this->client->request('POST', 'https://'.$this->getEndpoint().'/api/v2/mail/send', ['body'=>$requestData]);
 
         try {
             $statusCode = $response->getStatusCode();
@@ -83,7 +83,6 @@ class TurbosmtpApiTransport extends AbstractApiTransport
 
     protected function buildRecipients(Email $email, Envelope $envelope): array
     {
-        $recipients = [];
         foreach ($envelope->getRecipients() as $recipient) {
             $type = 'to';
             if (\in_array($recipient, $email->getBcc(), true)) {
@@ -94,9 +93,9 @@ class TurbosmtpApiTransport extends AbstractApiTransport
             $recipients[$type][]=$recipient->getAddress();
         }
         return [
-            'to'=>implode(',',$recipients['to']),
-            'cc'=>implode(',',$recipients['cc']),
-            'bcc'=>implode(',',$recipients['bcc']),
+            'to'=>(isset($recipients['to'])?implode(',',$recipients['to']):null),
+            'cc'=>(isset($recipients['cc'])?implode(',',$recipients['cc']):null),
+            'bcc'=>(isset($recipients['bcc'])?implode(',',$recipients['bcc']):null),
         ];
     }
 
@@ -117,7 +116,12 @@ class TurbosmtpApiTransport extends AbstractApiTransport
     }
 
     private function buildHeaders (Email $email): string {
-        $headers= $email->getPreparedHeaders()->toArray();
+        $headers=[];
+        foreach ($email->getPreparedHeaders()->toArray() as $header)
+        {
+            $splitted=explode(':',$header);
+            $headers[trim($splitted[0])]=trim($splitted[1]);
+        }
         return json_encode($headers);
     }
 
