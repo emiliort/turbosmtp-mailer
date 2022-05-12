@@ -10,14 +10,11 @@ composer require emiliort/turbosmtp-mailer
 
 Add custom trasport to config\services.yaml
 
-    Turbosmtp\:
-            resource: '../../turbosmtp-mailer/src'
-
-        mailer.transport_factory.custom:
-            class: Turbosmtp\TurbosmtpTransportFactory
-            parent: mailer.transport_factory.abstract
-            tags:
-            - {name: mailer.transport_factory}
+    mailer.transport_factory.custom:
+        class: Turbosmtp\TurbosmtpTransportFactory
+        parent: mailer.transport_factory.abstract
+        tags:
+        - {name: mailer.transport_factory}
 
 Configure MAILER_DSN enviroment variable:
 
