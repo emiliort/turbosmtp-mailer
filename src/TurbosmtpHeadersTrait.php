@@ -1,6 +1,6 @@
 <?php
 
-namespace Turbosmtp\Transport;
+namespace Turbosmtp;
 
 use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mailer\Header\MetadataHeader;
