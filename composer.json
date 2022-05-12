@@ -1,5 +1,6 @@
 {
     "name": "emiliort/turbosmtp-mailer",
+    "version": "1.0.0",
     "type": "library",
     "description": "Provides turboSMTP integration for Symfony Mailer.",
     "keywords": ["turboSMTP","symfony","mailer"],
