@@ -99,7 +99,7 @@ class TurbosmtpApiTransport extends AbstractApiTransport
         ];
     }
 
-    private function buildAttachments(Email $email): string
+  private function buildAttachments(Email $email): array
     {
         $result = [];
         foreach ($email->getAttachments() as $attachment) {
@@ -112,7 +112,7 @@ class TurbosmtpApiTransport extends AbstractApiTransport
             ];
         }
 
-        return json_encode($result);
+        return $result;
     }
 
     private function buildHeaders (Email $email): string {
